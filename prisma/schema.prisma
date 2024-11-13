@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id        Int        @id @default(autoincrement())
+  name      String?
+  email     String     @unique
+  password  String?
+  post      post[]
+  comments  comment[]  // Adds the opposite relation field for comments
+  create_at DateTime   @default(now())
+}
+
+model post {
+  id           Int        @id @default(autoincrement())
+  user         user       @relation(fields: [user_id], references: [id])
+  user_id      Int
+  title        String
+  description  String
+  coment_count Int     @default(0)
+  create_at    DateTime   @default(now())
+  comments     comment[]  // Adds the opposite relation field for comments
+}
+
+model comment {
+  id         String   @id @default(uuid())
+  post       post     @relation(fields: [post_id], references: [id])
+  post_id    Int
+  user       user     @relation(fields: [user_id], references: [id])
+  user_id    Int
+  comment    String
+  created_at DateTime @default(now())
+}
