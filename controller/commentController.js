@@ -10,8 +10,8 @@ export const createcomment=async (req,res)=>{
     const newData=await prisma.comment.create({
         data:{
             user_id :Number(user_id),
-            post_id_id:Number(post_id),
-            comment
+            post_id :Number(post_id),
+            comment,
 
         },
     })
@@ -25,9 +25,9 @@ export const commentUpdates =async (req,res)=>{
     const userId=req.params.id
     const {user_id, post_id, comment} =req.body
 
-    const updateData=await prisma.comment.update({
+    const updateData=await prisma.post.update({
         where:{
-            id:Number(userId),
+            id:Number(post_id),
         },
         data:{
            comment_count:{
@@ -43,13 +43,18 @@ export const allcomments=async (req,res)=>{
 
     const comment=await prisma.comment.findMany({
         include :{
-            // post :true
-            post: {
-                select:{
-                    title:true,
-                    coment_count: true,
-                },
+        // post :true
+            
+                    user:{
+                        select:{
+                            name:true,
+                        },
+
+                    
+            
+               
             },
+            post:true
         }, 
     })
 
@@ -58,11 +63,11 @@ export const allcomments=async (req,res)=>{
 
 
 export const deletecomment= async (req,res)=>{
-    const userId=req.params.id
+    const commentId=req.params.id
 
   await prisma.comment.delete({
         where:{
-            id:Number(userId),
+            id:Number(commentId),
         },
     })
     res.status(200).json({success:true, message:"delete compleete"})

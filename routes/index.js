@@ -7,6 +7,6 @@ import { commentRouters } from './commentRouters.js'
 
 indexRouter.use('/api/user',userRouter)
 indexRouter.use('/api/post',postRouter)
-indexRouter.use('/api/comment',commentRouters)
+indexRouter.use('/api/comments',commentRouters)
 
 export default indexRouter
